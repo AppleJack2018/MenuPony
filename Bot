@@ -1,0 +1,24 @@
+<?php
+
+require_once('simplevk-master/autoload.php'); // Подключение библиотеки
+
+
+use DigitalStar\vk_api\VK_api as vk_api; // Основной класс
+use DigitalStar\vk_api\VkApiException; // Обработка ошибок
+
+
+
+const VK_KEY = "1c95d005319fb08b7d5f832f3cb04bdf935dd65c402f1e9ee0d416b4f4b0d763a103c16d1c098a2c6fbb3";  // Токен сообщества
+const CONFIRM_STR = "6525459b";  // Тот самый ключ из сообщества
+const VERSION = "5.103"; // Версия API VK
+
+$vk = vk_api::create(VK_KEY, VERSION)->setConfirm(CONFIRM_STR);
+
+$data = json_decode(file_get_contents('php://input')); //Получает и декодирует JSON пришедший из ВК
+
+$vk->sendOK(); //Говорим vk, что мы приняли callback
+
+
+$peer_id = $data->object->message->peer_id;
+
+$vk->sendMessage($peer_id, "Работаю!");
